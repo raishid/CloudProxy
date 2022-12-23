@@ -14,28 +14,29 @@
     "url": "https://github.com/NoahCardoza/CloudProxy.git"
   },
   "dependencies": {
-    "@antiadmin/anticaptchaofficial": "^1.0.13",
+    "@antiadmin/anticaptchaofficial": "^1.0.27",
     "console-log-level": "^1.4.1",
-    "got": "^11.8.5",
+    "delay": "^5.0.0",
+    "got": "^12.5.3",
     "hcaptcha-solver": "^1.0.2",
-    "puppeteer": "^3.3.0",
-    "puppeteer-extra": "^3.1.15",
-    "puppeteer-extra-plugin-stealth": "^2.6.6",
-    "uuid": "^8.2.0"
+    "puppeteer": "^19.4.1",
+    "puppeteer-extra": "^3.3.4",
+    "puppeteer-extra-plugin-stealth": "^2.11.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/node": "^14.0.23",
+    "@types/node": "^18.11.17",
     "@types/puppeteer": "^3.0.1",
-    "@types/uuid": "^8.0.0",
-    "eslint": "^7.5.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.22.0",
+    "@types/uuid": "^9.0.0",
+    "eslint": "^8.30.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "nodemon": "^2.0.4",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7"
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-standard": "^4.1.0",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
   }
 }

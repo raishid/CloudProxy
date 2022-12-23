@@ -1,4 +1,4 @@
-FROM node:15.2.1-alpine3.11
+FROM node:16.17-alpine3.16
 
 # Print build information (ARGS are automatic, and target can be set)
 ARG TARGETPLATFORM
@@ -9,11 +9,13 @@ RUN printf "I am running on ${BUILDPLATFORM}, building for ${TARGETPLATFORM}\n$(
 RUN apk add --no-cache chromium dumb-init && \
     find /usr/lib/chromium/locales -type f ! -name 'en-US.*' -delete
 
+RUN npm install pm2 -g
+
 # Copy needed files into ~/cloudproxy/
 USER node
 RUN mkdir -p /home/node/cloudproxy
 WORKDIR /home/node/cloudproxy
-COPY --chown=node:node package.json package-lock.json tsconfig.json LICENSE ./
+COPY --chown=node:node package.json tsconfig.json LICENSE ./
 COPY --chown=node:node src ./src/
 
 # Skip installing Chrome, we will use the installed package.
@@ -28,5 +30,7 @@ RUN npm install && \
     npm prune --production
 
 EXPOSE 8191
+
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["npm", "start"]
+
+CMD ["pm2-runtime", "./dist/index.js"]

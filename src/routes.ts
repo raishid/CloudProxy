@@ -2,9 +2,12 @@ import { v1 as UUIDv1 } from 'uuid'
 import sessions, { SessionsCacheItem } from './session'
 import { RequestContext } from './types'
 import log from './log'
-import { Browser, SetCookie, Request, Page, Headers, HttpMethod, Overrides, Cookie } from 'puppeteer'
-import { TimeoutError } from 'puppeteer/Errors'
+import { Browser, Page } from 'puppeteer'
+import type { HTTPRequest } from 'puppeteer'
+import { SetCookie, Request, Headers, HttpMethod, Cookie, Overrides } from 'types/puppeteer'
+import { TimeoutError } from 'puppeteer'
 import getCaptchaSolver, { CaptchaType } from './captcha'
+import delay from 'delay'
 
 export interface BaseAPICall {
   cmd: string
@@ -89,7 +92,7 @@ async function interceptResponse(page: Page, callback: (payload: ChallengeResolu
     let cookies = await page.cookies();
     log.debug(cookies)
 
-    if (cookies.filter((c: Cookie) => c.name === 'cf_clearance').length > 0) {
+    if (cookies.filter(( c ) => c.name === 'cf_clearance').length > 0) {
       log.debug('Aborting request and return cookies. valid cookies found')
       await client.send('Fetch.failRequest', {requestId: e.requestId, errorReason: 'Aborted'})
 
@@ -154,7 +157,7 @@ async function resolveChallenge(ctx: RequestContext, { url, maxTimeout, proxy, d
 
           // TODO: find out why these pages hang sometimes
           while (Date.now() - ctx.startTimestamp < maxTimeout) {
-            await page.waitFor(1000)
+            await delay(1000)
             try {
               // catch exception timeout in waitForNavigation
               response = await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 5000 })
@@ -251,7 +254,7 @@ async function resolveChallenge(ctx: RequestContext, { url, maxTimeout, proxy, d
 
           // waits, if any, time remaining to appear human but stay as fast as possible
           const timeLeft = randomWaitTime - captchaSolveTotalTime
-          if (timeLeft > 0) { await page.waitFor(timeLeft) }
+          if (timeLeft > 0) { await delay(timeLeft) }
 
           let interceptingResult: ChallengeResolutionT;
           if (returnOnlyCookies) { //If we just want to get the cookies, intercept the response before we get the content/body (just cookies and headers)
@@ -353,7 +356,7 @@ async function setupPage(ctx: RequestContext, params: BaseRequestAPICall, browse
   if (Object.keys(overrideResolvers).length > 0) {
     log.debug(overrideResolvers)
     let callbackRunOnce = false
-    const callback = (request: Request) => {
+    const callback = (request: HTTPRequest) => {
 
       if (callbackRunOnce || !request.isNavigationRequest()) {
         request.continue()

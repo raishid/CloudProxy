@@ -3,7 +3,8 @@ import * as path from 'path'
 import * as fs from 'fs'
 
 import puppeteer from 'puppeteer-extra'
-import { LaunchOptions, Browser, Headers, SetCookie } from 'puppeteer'
+import { type LaunchOptions, Browser, type BrowserLaunchArgumentOptions } from 'puppeteer'
+import {type Headers, type SetCookie} from 'types/puppeteer'
 
 import log from './log'
 import { deleteFolderRecursive, sleep, removeEmptyFields } from './utils'
@@ -61,9 +62,10 @@ export default {
       args.push(`--proxy-server=${proxy}`);
     }
 
-    const puppeteerOptions: LaunchOptions = {
+    const puppeteerOptions: LaunchOptions & BrowserLaunchArgumentOptions = {
       product: 'chrome',
       headless: process.env.HEADLESS !== 'false',
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
       args
     }
 
