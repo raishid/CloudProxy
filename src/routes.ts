@@ -132,7 +132,7 @@ async function resolveChallenge(ctx: RequestContext, { url, maxTimeout, proxy, d
   let response = await page.goto(url, { waitUntil: 'domcontentloaded' })
 
   // look for challenge
-  if (response.headers().server.startsWith('cloudflare')) {
+  if (response.headers().server?.startsWith('cloudflare')) {
     log.info('Cloudflare detected')
 
     if (await page.$('.cf-error-code')) {
